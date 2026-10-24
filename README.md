@@ -20,7 +20,7 @@ Built for CCEN 448 Exercise 6 (Khalifa University).
 Requires Docker with the Compose plugin.
 
 ```bash
-git clone https://github.com/<your-user>/ku-lab-notebook.git
+git clone https://github.com/kaz4n/ku-lab-notebook.git
 cd ku-lab-notebook
 echo "DB_PASSWORD=$(openssl rand -hex 12)" > .env
 docker compose up -d --build
