@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: notebook
+      POSTGRES_USER: notebook
+      POSTGRES_PASSWORD: "${DB_PASSWORD:?create .env with DB_PASSWORD, see README}"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notebook -d notebook"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGUSER: notebook
+      PGPASSWORD: ${DB_PASSWORD}
+      PGDATABASE: notebook
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+
+volumes:
+  dbdata:

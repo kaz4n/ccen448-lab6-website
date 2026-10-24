@@ -1,0 +1,104 @@
+:root {
+  --navy: #07214d;
+  --navy-deep: #001b48;
+  --blue: #2059a8;
+  --blue-dark: #174580;
+  --grey-bg: #f2f2f2;
+  --line: #cfd4dc;
+  --text: #202020;
+  --muted: #5d6677;
+  --red: #a4262c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 16px/1.5 "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  color: var(--text);
+  background: var(--grey-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap { width: 100%; max-width: 920px; margin: 0 auto; padding: 0 20px; }
+main { flex: 1; padding-top: 28px; padding-bottom: 48px; }
+
+a { color: var(--blue); }
+a:hover { color: var(--navy); }
+code { font: 0.9em Consolas, "Courier New", monospace; }
+
+/* header */
+header { background: var(--navy); color: #fff; border-bottom: 4px solid var(--blue); }
+.bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 14px; padding-bottom: 14px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; line-height: 1.2; }
+.uni { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: #b9c7e0; }
+.app { color: #fff; font-size: 1.25rem; font-weight: 600; text-decoration: none; }
+nav { display: flex; align-items: center; gap: 16px; font-size: 0.95rem; }
+nav a { color: #fff; }
+nav form { margin: 0; }
+nav .link { color: #fff; text-decoration: underline; }
+
+footer { border-top: 1px solid var(--line); background: #fff; padding: 12px 0; font-size: 0.85rem; color: var(--muted); }
+
+/* text */
+h1 { font-size: 1.6rem; color: var(--navy); margin: 0 0 16px; font-weight: 600; }
+.hint { color: var(--muted); font-size: 0.92rem; }
+.empty { color: var(--muted); padding: 24px 0; }
+.error { background: #fbeaea; border: 1px solid #e3b4b4; color: var(--red); padding: 8px 12px; border-radius: 2px; }
+
+/* forms */
+label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 14px; color: var(--navy); }
+input, select, textarea {
+  display: block; width: 100%; margin-top: 4px; padding: 8px 10px;
+  font: inherit; font-weight: 400; color: var(--text);
+  background: #fff; border: 1px solid #9aa3b2; border-radius: 2px;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--blue); outline-offset: 0; border-color: var(--blue); }
+textarea { resize: vertical; }
+
+button {
+  font: inherit; font-weight: 600; cursor: pointer;
+  padding: 8px 18px; color: #fff; background: var(--blue);
+  border: 1px solid var(--blue); border-radius: 2px;
+}
+button:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+button.link { background: none; border: 0; padding: 0; color: var(--blue); font-weight: 400; text-decoration: underline; }
+button.link:hover { color: var(--navy); }
+button.danger { color: var(--red); }
+
+.narrow { max-width: 380px; background: #fff; border: 1px solid var(--line); padding: 24px; }
+.narrow.wide { max-width: 640px; }
+
+.row { display: flex; gap: 14px; }
+.row .grow { flex: 1; }
+.row label:not(.grow) { width: 120px; }
+
+/* entries */
+details.new { background: #fff; border: 1px solid var(--line); margin-bottom: 20px; }
+details.new summary { padding: 10px 16px; cursor: pointer; font-weight: 600; color: var(--navy); }
+details.new[open] summary { border-bottom: 1px solid var(--line); }
+details.new .entry-form { padding: 16px; }
+
+.search { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; }
+.search input { margin: 0; max-width: 320px; }
+
+table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { background: var(--navy); color: #fff; font-size: 0.85rem; font-weight: 600; border-bottom: 0; }
+td.lab { white-space: nowrap; color: var(--blue); font-weight: 600; width: 70px; }
+td.when { white-space: nowrap; color: var(--muted); font-size: 0.88rem; width: 140px; }
+td.act { white-space: nowrap; width: 110px; }
+td.act form { display: inline; margin-left: 10px; }
+.title { font-weight: 600; }
+.body { color: #3e3e3e; font-size: 0.93rem; white-space: pre-wrap; margin-top: 2px; }
+
+table.kv th { width: 200px; background: var(--grey-bg); color: var(--navy); font-size: 0.9rem; }
+
+@media (max-width: 620px) {
+  .row { flex-direction: column; gap: 0; }
+  .row label:not(.grow) { width: 100%; }
+  td.when { display: none; }
+  thead th:nth-child(3) { display: none; }
+}
