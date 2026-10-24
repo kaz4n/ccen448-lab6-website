@@ -1,10 +1,25 @@
 # CCEN 448 Lab Notebook
 
-A small web application for keeping lab notes. Users register, sign in, and
-write, search, edit and delete their own entries. Accounts, sessions and
-entries are stored in PostgreSQL.
+A web application for keeping lab notes, with user accounts and a PostgreSQL
+database behind it. Built for CCEN 448 Exercise 6 (Khalifa University).
 
-Built for CCEN 448 Exercise 6 (Khalifa University).
+## Features
+
+- Accounts: register, sign in, change password (other devices are signed out),
+  lockout for 15 minutes after 5 wrong passwords, per-user activity log.
+- Roles: the first account on a fresh database is the administrator. Admins see
+  all users, can promote, demote or delete them, and read the audit log.
+- Entries: create, edit, delete; each has a lab number (1 to 10), notes and up
+  to 8 tags. Ten entries per page.
+- Search: PostgreSQL full-text search (`tsvector` + GIN index, `websearch_to_tsquery`),
+  ranked by relevance with highlighted excerpts. Quoted phrases and `-word` work.
+  Filter by lab or tag.
+- Dashboard: totals, entries per lab and per day (SQL aggregates drawn as SVG
+  charts, no JavaScript on the page), most used tags.
+- Lab progress: not started / in progress / done for each of the ten labs.
+- CSV export of your entries.
+- `/status` shows which host runs the web server, database version and size,
+  memory in use, and whether the request arrived over HTTPS.
 
 ## Stack
 
@@ -14,6 +29,13 @@ Built for CCEN 448 Exercise 6 (Khalifa University).
 | Database | PostgreSQL 16 (container, not exposed outside the host) |
 | Authentication | Username + password (scrypt hashes), server-side sessions in the database, `HttpOnly` cookie |
 | Packaging | Docker Compose |
+
+## Resource use
+
+Sized for the smallest Lightsail plans. Compose caps the containers (`db` 256 MB,
+`web` 160 MB), Postgres runs with `shared_buffers=48MB` and 30 connections, and
+Node uses at most 96 MB of heap and a pool of 5 connections. The Node process used about 55 MB resident
+in testing; check the live figure on `/status`. The only npm dependencies are `express` and `pg`.
 
 ## Install
 
@@ -55,7 +77,8 @@ docker compose exec db psql -U notebook -d notebook
 ```sql
 \dt
 SELECT id, username, created_at FROM users;
-SELECT id, user_id, lab, title FROM entries;
+SELECT id, user_id, lab, title, tags FROM entries;
+SELECT event, username, ip, created_at FROM audit_log ORDER BY id DESC LIMIT 10;
 ```
 
 ## HTTPS behind a proxy or tunnel
@@ -78,10 +101,15 @@ docker compose down -v         # stop and delete all data
 ## Layout
 
 ```
-server.js          routes, sessions, database queries
-views.js           HTML templates
+server.js          app setup, /status, /health
+auth.js            sign in, register, sessions, lockout, account page
+entries.js         entries CRUD, search, tags, pagination
+insights.js        dashboard, lab progress, CSV export
+admin.js           user management, audit log
+db.js              connection pool, audit helper
+views.js           HTML templates and SVG charts
 public/style.css   styles
-schema.sql         tables: users, sessions, entries
+schema.sql         tables: users, sessions, entries, lab_progress, audit_log
 Dockerfile         web image
 docker-compose.yml web + db services
 ```
