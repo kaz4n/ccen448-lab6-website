@@ -42,8 +42,8 @@ in testing; check the live figure on `/status`. The only npm dependencies are `e
 Requires Docker with the Compose plugin.
 
 ```bash
-git clone https://github.com/kaz4n/ku-lab-notebook.git
-cd ku-lab-notebook
+git clone https://github.com/kaz4n/ccen448-lab6-website.git
+cd ccen448-lab6-website
 echo "DB_PASSWORD=$(openssl rand -hex 12)" > .env
 docker compose up -d --build
 ```
